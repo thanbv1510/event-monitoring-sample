@@ -6,12 +6,15 @@ import com.ibm.mq.MQPoolToken;
 import com.ibm.mq.MQQueueManager;
 import com.ibm.mq.constants.CMQC;
 import com.ibm.mq.constants.CMQXC;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
 public class MQConnectionBuilder {
+    private static final Logger logger = LoggerFactory.getLogger(MQConnectionBuilder.class);
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("config");
     private static MQConnectionBuilder instance;
     private static MQQueueManager queueManager;
@@ -34,7 +37,7 @@ public class MQConnectionBuilder {
         try {
             queueManager = new MQQueueManager(resourceBundle.getString("in.queue.manager"));  //create connection and return
         } catch (MQException e) {
-            e.printStackTrace();
+            logger.error("==> Ex: ", e);
         }
     }
 
@@ -45,23 +48,11 @@ public class MQConnectionBuilder {
     public MQQueueManager getQueueManager() {
         if (queueManager == null || !queueManager.isConnected()) {
             try {
-                queueManager = new MQQueueManager(resourceBundle.getString(""));
+                queueManager = new MQQueueManager(resourceBundle.getString("in.queue.manager"));
             } catch (MQException e) {
-                e.printStackTrace();
+                logger.error("==> Ex: ", e);
             }
         }
         return queueManager;
-    }
-
-    public void closeConnection() {
-        try {
-            if (queueManager.isConnected()) {
-                queueManager.close();
-                queueManager = null;
-                MQEnvironment.removeConnectionPoolToken(token);
-            }
-        } catch (MQException e) {
-            e.printStackTrace();
-        }
     }
 }

@@ -7,8 +7,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MQConsumer {
-    private final MQQueueManager manager;
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("config");
+    private final MQQueueManager manager;
 
     public MQConsumer() {
         MQConnectionBuilder connectionBuilder = MQConnectionBuilder.getInstance();
