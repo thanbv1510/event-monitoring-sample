@@ -9,15 +9,15 @@ import com.ibm.mq.constants.CMQXC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ResourceBundle;
-import java.util.Vector;
 
 public class MQConnectionBuilder {
     private static final Logger logger = LoggerFactory.getLogger(MQConnectionBuilder.class);
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("config");
     private static MQConnectionBuilder instance;
-    private static MQQueueManager queueManager;
+    private MQQueueManager queueManager;
     MQPoolToken token;
 
     private MQConnectionBuilder() {
@@ -30,8 +30,8 @@ public class MQConnectionBuilder {
         MQEnvironment.properties.put(CMQC.TRANSPORT_PROPERTY, CMQC.TRANSPORT_MQSERIES_CLIENT);
 
         //Compress headers
-        Collection headerComp = new Vector();
-        headerComp.add(new Integer(CMQXC.MQCOMPRESS_SYSTEM));
+        Collection<Object> headerComp = new ArrayList<>();
+        headerComp.add(CMQXC.MQCOMPRESS_SYSTEM);
         MQEnvironment.hdrCompList = headerComp;
 
         try {
@@ -42,7 +42,10 @@ public class MQConnectionBuilder {
     }
 
     public static MQConnectionBuilder getInstance() {
-        return instance == null ? new MQConnectionBuilder() : instance;
+        if (instance != null) {
+            instance = new MQConnectionBuilder();
+        }
+        return instance;
     }
 
     public MQQueueManager getQueueManager() {
