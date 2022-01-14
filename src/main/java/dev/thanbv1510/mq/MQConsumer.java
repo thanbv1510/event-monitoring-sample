@@ -2,6 +2,7 @@ package dev.thanbv1510.mq;
 
 import com.ibm.mq.*;
 import com.ibm.mq.constants.CMQC;
+import dev.thanbv1510.domain.model.MQConfiguration;
 
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -9,8 +10,10 @@ import java.util.ResourceBundle;
 public class MQConsumer {
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("config");
     private final MQQueueManager manager;
+    private final MQConfiguration config;
 
     public MQConsumer() {
+        this.config = new MQConfiguration();
         MQConnectionBuilder connectionBuilder = MQConnectionBuilder.getInstance();
         this.manager = connectionBuilder.getQueueManager();
     }
@@ -20,7 +23,7 @@ public class MQConsumer {
             return Optional.empty();
         }
 
-        MQQueue readableQueue = manager.accessQueue(resourceBundle.getString("in.queue.name"), CMQC.MQGMO_WAIT + CMQC.MQGMO_FAIL_IF_QUIESCING);
+        MQQueue readableQueue = manager.accessQueue(config.getQueue(), CMQC.MQGMO_WAIT + CMQC.MQGMO_FAIL_IF_QUIESCING);
         if (readableQueue == null) {
             return Optional.empty();
         }
