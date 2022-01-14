@@ -10,6 +10,7 @@ import dev.thanbv1510.utils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Timer;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -46,6 +47,8 @@ public class Main {
             Runnable thread = new Receiver(queueManager, blockingQueueLogs);
             executorReceiverService.execute(thread);
         }
+
+        monitor(executorReceiverService, "Executor Receiver");
     }
 
     private static void initProcessors() {
@@ -56,5 +59,13 @@ public class Main {
             Runnable thread = new Processor(blockingQueueLogs);
             executorProcessorService.execute(thread);
         }
+
+        monitor(executorProcessorService, "Executor Processor");
+    }
+
+    private static void monitor(ExecutorService executorService, String executorServiceName) {
+        int period = PropertyUtils.getProperty(ThreadConstants.MONITOR_TIME, Integer.class).orElse(60);
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new Monitor(executorService, executorServiceName), 0, period * 1000L);
     }
 }

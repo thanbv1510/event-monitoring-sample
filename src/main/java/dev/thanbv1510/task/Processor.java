@@ -29,7 +29,7 @@ public class Processor implements Runnable {
     public void run() {
         int batchSize = PropertyUtils.getProperty(DatabaseConstants.BATCH_SIZE, Integer.class).orElse(10);
         List<LogInfoEntity> logInfoEntities = new ArrayList<>();
-        while (true) {
+        while (!Thread.interrupted()) {
             try {
                 LogInfoEntity logInfoEntity = blockingQueueLogs.poll();
                 if (logInfoEntity != null) {

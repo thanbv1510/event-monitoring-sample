@@ -33,7 +33,7 @@ public class Receiver implements Runnable {
         gmo.options = CMQC.MQGMO_WAIT + CMQC.MQGMO_FAIL_IF_QUIESCING;
         gmo.waitInterval = 10000;  // wait up to 10 seconds
 
-        while (true) {
+        while (!Thread.interrupted()) {
             try {
                 MQQueue readableQueue = manager.accessQueue(config.getQueue(), CMQC.MQGMO_WAIT + CMQC.MQGMO_FAIL_IF_QUIESCING);
                 MQMessage message = new MQMessage();
