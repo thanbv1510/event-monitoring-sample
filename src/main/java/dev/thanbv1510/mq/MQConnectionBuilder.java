@@ -23,7 +23,7 @@ public class MQConnectionBuilder {
     private MQConnectionBuilder() {
         //Pooling connection
         this.token = MQEnvironment.addConnectionPoolToken();
-        this.config = new MQConfiguration();
+        this.config = MQConfiguration.getInstance();
         MQEnvironment.hostname = config.getHost();
         MQEnvironment.channel = config.getChannel();
         MQEnvironment.port = config.getPort();
@@ -43,7 +43,7 @@ public class MQConnectionBuilder {
         }
     }
 
-    public static MQConnectionBuilder getInstance() {
+    public static synchronized MQConnectionBuilder getInstance() {
         if (instance == null) {
             instance = new MQConnectionBuilder();
         }

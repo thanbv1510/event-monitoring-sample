@@ -11,7 +11,7 @@ public class MQProducer {
     private final MQQueueManager manager;
 
     public MQProducer() {
-        config = new MQConfiguration();
+        config = MQConfiguration.getInstance();
         MQConnectionBuilder connectionBuilder = MQConnectionBuilder.getInstance();
         this.manager = connectionBuilder.getQueueManager();
     }

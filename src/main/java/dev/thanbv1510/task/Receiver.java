@@ -24,7 +24,7 @@ public class Receiver implements Runnable {
     public Receiver(MQQueueManager manager, BlockingQueue<LogInfoEntity> blockingQueueLogs) {
         this.manager = manager;
         this.blockingQueueLogs = blockingQueueLogs;
-        this.config = new MQConfiguration();
+        this.config = MQConfiguration.getInstance();
     }
 
     @Override

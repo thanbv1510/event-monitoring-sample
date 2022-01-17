@@ -5,15 +5,13 @@ import com.ibm.mq.constants.CMQC;
 import dev.thanbv1510.domain.model.MQConfiguration;
 
 import java.util.Optional;
-import java.util.ResourceBundle;
 
 public class MQConsumer {
-    private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("config");
     private final MQQueueManager manager;
     private final MQConfiguration config;
 
     public MQConsumer() {
-        this.config = new MQConfiguration();
+        this.config = MQConfiguration.getInstance();
         MQConnectionBuilder connectionBuilder = MQConnectionBuilder.getInstance();
         this.manager = connectionBuilder.getQueueManager();
     }
@@ -33,7 +31,6 @@ public class MQConsumer {
         gmo.options = CMQC.MQGMO_WAIT + CMQC.MQGMO_FAIL_IF_QUIESCING;
         gmo.waitInterval = 5000;  // wait up to 5 seconds
         readableQueue.get(message, gmo);
-
 
         return Optional.of(message);
     }
